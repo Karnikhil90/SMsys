@@ -22,6 +22,10 @@ public abstract class Person {
         return (LocalDate) properties.get("dob");
     }
 
+    public void setDob(LocalDate dob) {
+        properties.put("dob", dob);
+    }
+
     public String getContact() {
         return (String) properties.get("contact");
     }
