@@ -1,0 +1,7 @@
+.vscode
+
+# compiled stuff 
+*.class
+# Debuging & Testing 
+test
+
