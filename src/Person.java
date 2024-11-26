@@ -42,6 +42,10 @@ public abstract class Person {
         return properties;
     }
 
+    public String toString() {
+        return "Name: " + getName() + ", DOB: " + getDob() + ", Contact: " + getContact();
+    }
+
     public abstract void role(); // Force subclasses to define their role
 
     public abstract String getID();
