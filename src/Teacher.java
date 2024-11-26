@@ -3,38 +3,39 @@ package src;
 import java.time.LocalDate;
 
 public class Teacher extends Person {
-    private String subject;
-    private String employeeId;
-
-    Teacher(String name, LocalDate dob, String contact, String employeeId, String subject) {
+    public Teacher(String name, LocalDate dob, String contact, String employeeId, String subject) {
         super(name, dob, contact);
-        this.employeeId = employeeId;
-        this.subject = subject;
+        getProperties().put("employeeId", employeeId);
+        getProperties().put("subject", subject);
     }
 
     @Override
     public void role() {
-        System.out.println("I am a teacher with Employee ID: " + employeeId + " teaching: " + subject);
+        System.out.println("I am a teacher with Employee ID: " + getID() + " teaching: " + getSubject());
     }
 
+    // Getter and Setter for Employee ID
+    @Override
+    public String getID() {
+        return (String) getProperties().get("employeeId");
+    }
+
+    public void setID(String employeeId) {
+        getProperties().put("employeeId", employeeId);
+    }
+
+    // Getter and Setter for Subject
     public String getSubject() {
-        return subject;
+        return (String) getProperties().get("subject");
     }
 
     public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+        getProperties().put("subject", subject);
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Employee ID: " + employeeId + ", Subject: " + subject;
+        return super.toString() + ", Employee ID: " + getID() + ", Subject: " + getSubject();
     }
+
 }

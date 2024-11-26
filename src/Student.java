@@ -1,37 +1,37 @@
 package src;
 
 import java.time.LocalDate;
-// import java.time.Period;
 
 public class Student extends Person {
-    private String Student_Id;
-    private String Standard;
+    private String studentId;
+    private String standard;
 
-    Student(String name, LocalDate dob, String contact, String Student_Id, String Standard) {
+    public Student(String name, LocalDate dob, String contact, String studentId, String standard) {
         super(name, dob, contact);
-        this.Standard = Standard;
-        this.Student_Id = Student_Id;
+        this.studentId = studentId;
+        this.standard = standard;
     }
 
     @Override
     public void role() {
-        System.out.println("I am a student with ID: " + Student_Id);
+        System.out.println("I am a student with ID: " + studentId);
+    }
+
+    @Override
+    public String getID() {
+        return studentId; // Return the student's ID
     }
 
     public String getStandard() {
-        return Standard;
+        return standard;
     }
 
-    public void setStandard(String STD) {
-        Standard = STD;
+    public void setStandard(String standard) {
+        this.standard = standard;
     }
 
-    public String getStudentID() {
-        return Student_Id;
+    @Override
+    public String toString() {
+        return super.toString() + ", Student ID: " + studentId + ", Standard: " + standard;
     }
-
-    public void setStudentID(String ID) {
-        Student_Id = ID;
-    }
-
 }

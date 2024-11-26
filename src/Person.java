@@ -2,42 +2,43 @@ package src;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Person {
-    private String name;
-    private LocalDate dob;
-    private String contact;
+    private Map<String, Object> properties = new HashMap<>();
 
     public Person(String name, LocalDate dob, String contact) {
-        this.name = name;
-        this.dob = dob;
-        this.contact = contact;
+        properties.put("name", name);
+        properties.put("dob", dob);
+        properties.put("contact", contact);
     }
 
     public String getName() {
-        return name;
+        return (String) properties.get("name");
     }
 
     public LocalDate getDob() {
-        return dob;
+        return (LocalDate) properties.get("dob");
     }
 
     public String getContact() {
-        return contact;
+        return (String) properties.get("contact");
     }
 
     public void setContact(String contact) {
-        this.contact = contact;
+        properties.put("contact", contact);
     }
 
     public int getAge() {
-        return Period.between(dob, LocalDate.now()).getYears();
+        return Period.between(getDob(), LocalDate.now()).getYears();
     }
 
-    @Override
-    public String toString() {
-        return "Name: " + name + ", DOB: " + dob + ", Contact: " + (contact != null ? contact : "N/A");
+    public Map<String, Object> getProperties() {
+        return properties;
     }
 
     public abstract void role(); // Force subclasses to define their role
+
+    public abstract String getID();
 }
