@@ -26,7 +26,7 @@ public class Main {
         dataManager.add(nts);
 
         // List all people
-        dataManager.list();
+        dataManager.printList();
 
         // Find a person by name
         Person found = dataManager.find("Alice");
@@ -36,8 +36,11 @@ public class Main {
             System.out.println("Person not found.");
         }
 
-        // Update a person's contact
-        dataManager.updateContact("Alice", "alice.new@example.com");
+        // Update (id, field , updateTO)
+
+        // field NAME, CONTACT,DOB,STANDARD,SUBJECT,DEPARTMENT
+
+        dataManager.update("S001", dataManager.CONTACT, "alice.new@example.com");
 
         // Remove a person by name
         boolean removed = dataManager.remove("Charlie");
@@ -48,6 +51,6 @@ public class Main {
         }
 
         // List all people after updates
-        dataManager.list();
+        dataManager.printList();
     }
 }
