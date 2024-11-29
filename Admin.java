@@ -30,20 +30,30 @@ public class Admin {
             try {
                 System.out.println("Enter your date of birth (format: yyyy-MM-dd): ");
                 String dateOfBirth = scanner.nextLine().trim();
+
+                // Split the input into year, month, and day
                 String[] dob = dateOfBirth.split("-");
 
+                // Check if the input has the correct format (yyyy-MM-dd)
                 if (dob.length != 3) {
                     System.out.println("Invalid format. Please ensure it's in yyyy-MM-dd format.");
                     continue;
                 }
 
-                System.out.println("Year: " + dob[0] + ", Month: " + dob[1] + ", Day: " + dob[2]);
+                // Format the month and day to be two digits
+                String year = dob[0];
+                String month = String.format("%02d", Integer.parseInt(dob[1])); // Ensure two-digit month
+                String day = String.format("%02d", Integer.parseInt(dob[2])); // Ensure two-digit day
+
+                String formattedDate = year + "-" + month + "-" + day;
+
+                System.out.println("Year: " + year + ", Month: " + month + ", Day: " + day);
                 System.out.print("Is this correct? (yes/no): ");
                 String confirmation = scanner.nextLine().trim().toLowerCase();
 
                 if (confirmation.equals("yes")) {
-                    // Parse the input into a LocalDate object
-                    LocalDate parsedDate = LocalDate.parse(dateOfBirth);
+                    // Parse the formatted string into a LocalDate object
+                    LocalDate parsedDate = LocalDate.parse(formattedDate);
                     System.out.println("Date of Birth confirmed as: " + parsedDate);
                     return parsedDate;
                 } else {
@@ -51,54 +61,174 @@ public class Admin {
                 }
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format. Please enter a valid date in yyyy-MM-dd format.");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number format. Please ensure the month and day are valid.");
             }
         }
     }
 
     private void choice(int option1, String option2) {
-        // add
-        if (option1 == 1) { // student
-            System.out.println("Adding new student...");
-            System.out.print("Enter student name : ");
-            String name = scanner.nextLine().trim();
-            System.out.print("Enter student contact : ");
-            String contact = scanner.nextLine().trim();
-            System.out.print("Enter student standard/class : ");
-            String standard = scanner.nextLine().trim();
-            // System.out.print("Enter student date Of Birth [YYYY-MM-DD]: ");
-            LocalDate dob = dob_input();
+        if (option1 == 1) { // Add
+            if (option2.equalsIgnoreCase(dataManager.STUDENT)) { // Add Student
+                System.out.println("Adding new student...");
+                System.out.print("Enter student name: ");
+                String name = scanner.nextLine().trim();
+                System.out.print("Enter student contact: ");
+                String contact = scanner.nextLine().trim();
+                System.out.print("Enter student standard/class: ");
+                String standard = scanner.nextLine().trim();
+                LocalDate dob = dob_input();
 
-        } else if (option1 == 2) { // techer
+                Student student = new Student(name, dob, contact, dataManager.getNewID(dataManager.STUDENT), standard);
+                dataManager.add(student);
+                System.out.println("Student added successfully!");
 
-        } else if (option1 == 3) { // NonTeachingStaff
+            } else if (option2.equalsIgnoreCase("2")) { // Add Teacher
+                System.out.println("Adding new teacher...");
+                System.out.print("Enter teacher name: ");
+                String name = scanner.nextLine().trim();
+                System.out.print("Enter teacher contact: ");
+                String contact = scanner.nextLine().trim();
+                System.out.print("Enter teacher subject: ");
+                String subject = scanner.nextLine().trim();
+                LocalDate dob = dob_input();
 
-        } else if (option1 == 4) {
-        } else if (option1 == 5) {
-        } else if (option1 == 6) {
-        } else if (option1 == 7) {
-        } else if (option1 == 8) {
-        } else if (option1 == 9) {
+                Teacher teacher = new Teacher(name, dob, contact, dataManager.getNewID(dataManager.TEACHER), subject);
+                dataManager.add(teacher);
+                System.out.println("Teacher added successfully!");
+
+            } else if (option2.equalsIgnoreCase("3")) { // Add NonTeachingStaff
+                System.out.println("Adding new non-teaching staff...");
+                System.out.print("Enter staff name: ");
+                String name = scanner.nextLine().trim();
+                System.out.print("Enter staff contact: ");
+                String contact = scanner.nextLine().trim();
+                System.out.print("Enter staff designation: ");
+                String designation = scanner.nextLine().trim();
+                LocalDate dob = dob_input();
+
+                NonTeachingStaff staff = new NonTeachingStaff(name, dob, contact, dataManager.getNewID(dataManager.NTS),
+                        designation);
+                dataManager.add(staff);
+                System.out.println("Non-teaching staff added successfully!");
+            } else {
+                System.out.println("Invalid choice for Add operation.");
+            }
+        } else if (option1 == 2) { // Update
+            System.out.println("Updating person...");
+            System.out.print("Enter person ID to update: ");
+            String personId = scanner.nextLine().trim();
+            Person person = dataManager.findByID(personId);
+
+            if (person != null) {
+                System.out.println("Found: " + person);
+                System.out.print("Enter new name (leave blank to keep unchanged): ");
+                String newName = scanner.nextLine().trim();
+                System.out.print("Enter new contact (leave blank to keep unchanged): ");
+                String newContact = scanner.nextLine().trim();
+
+                if (!newName.isEmpty())
+                    person.setName(newName);
+                if (!newContact.isEmpty())
+                    person.setContact(newContact);
+
+                System.out.println("Details updated successfully!");
+            } else {
+                System.out.println("Person not found.");
+            }
+
+        } else if (option1 == 3) { // Remove
+            System.out.println("Removing person...");
+            System.out.print("Enter person ID to remove: ");
+            String personId = scanner.nextLine().trim();
+            boolean removed = dataManager.remove(personId);
+
+            if (removed) {
+                System.out.println("Person removed successfully!");
+            } else {
+                System.out.println("Person not found.");
+            }
+
+        } else if (option1 == 4) { // Search
+            System.out.println("Searching person...");
+            System.out.print("Enter person name or ID to search: ");
+            String query = scanner.nextLine().trim();
+            Person person = dataManager.find(query);
+
+            if (person != null) {
+                System.out.println("Found: " + person);
+            } else {
+                System.out.println("No matching person found.");
+            }
+
+        } else {
+            System.out.println("Invalid operation. Please choose a valid option.");
         }
     }
 
     private void askForChoice() {
-        System.out.println("0.Exit 1.Add \n2. Update \n3. Remove\n 4. Search");
-        System.out.print("Enter your choice : ");
-        String first_choice = scanner.nextLine().trim();
-        if (first_choice != "0" && first_choice != "4") {
-            System.out.println("1.Student \n2.Teacher \n3. NonTeachingStaff");
-            System.out.print("Enter your choice : ");
-            String second_choice = scanner.nextLine().trim();
+        while (true) {
+            System.out.println("\nChoose an option:");
+            System.out.println("0. Exit");
+            System.out.println("1. Add");
+            System.out.println("2. Update");
+            System.out.println("3. Remove");
+            System.out.println("4. Search");
+            System.out.print("Enter your choice: ");
 
+            String firstChoice = scanner.nextLine().trim();
+
+            // Handle exit case
+            if (firstChoice.equals("0")) {
+                System.out.println("Exiting...");
+                break;
+            }
+
+            switch (firstChoice) {
+                case "1": // Add
+                    System.out.println("\nChoose type to add:");
+                    System.out.println("1. Student");
+                    System.out.println("2. Teacher");
+                    System.out.println("3. Non-Teaching Staff");
+                    System.out.print("Enter your choice: ");
+                    String addChoice = scanner.nextLine().trim();
+                    choice(1, switch (addChoice) {
+                        case "1" -> dataManager.STUDENT;
+                        case "2" -> dataManager.TEACHER;
+                        case "3" -> dataManager.NTS;
+                        default -> {
+                            System.out.println("Invalid choice.");
+                            yield ""; // Returning an empty string if invalid choice
+                        }
+                    });
+                    break;
+
+                case "2": // Update
+                    choice(2, null); // No second choice needed for update
+                    break;
+
+                case "3": // Remove
+                    choice(3, null); // No second choice needed for remove
+                    break;
+
+                case "4": // Search
+                    choice(4, null); // No second choice needed for search
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
         }
-        if (first_choice == "4") {
-            choice(Integer.valueOf(first_choice));
-        }
-        System.out.println("Exit....");
     }
 
     public static void main(String[] args) {
-
+        Admin myobj = new Admin();
+        try {
+            myobj.askForChoice();
+        } catch (Exception e) {
+            System.err.println("Error : " + e);
+        }
     }
 
 }
