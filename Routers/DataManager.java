@@ -20,7 +20,7 @@ import java.util.List;
 public class DataManager {
     public final String NAME = "name", CONTACT = "contact", DOB = "dob";
     public final String STANDARD = "standard", SUBJECT = "subject", DEPARTMENT = "department";
-
+    public final String STUDENT = "Student", TEACHER = "Teacher", NTS = "NonTeachingStaff";
     private List<Person> people;
 
     public DataManager() {
@@ -162,6 +162,49 @@ public class DataManager {
                 System.out.println("Invalid field specified.");
                 return false;
         }
+    }
+
+    /**
+     * Generates a new unique ID for the specified `Person_type` (e.g., "Student").
+     * Iterates through the list of `Person` objects, finds the highest numeric ID
+     * for the given type, and returns the next sequential ID as a string.
+     * Assumes IDs are numeric and sequential.
+     *
+     * @param Person_type The type of `Person`.
+     * 
+     * @return A new unique ID as a `String`.
+     */
+
+    public String getNewID(String Person_type) {
+        int maxId = 0;
+
+        for (Person person : people) {
+            if (Person_type.equalsIgnoreCase(STUDENT) && person instanceof Student) {
+                String id = person.getID();
+                try {
+                    maxId = Math.max(maxId, Integer.parseInt(id));
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid ID format for student: " + id);
+                }
+            } else if (Person_type.equalsIgnoreCase(TEACHER) && person instanceof Teacher) {
+                String id = person.getID();
+                try {
+                    maxId = Math.max(maxId, Integer.parseInt(id));
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid ID format for teacher: " + id);
+                }
+            } else if (Person_type.equalsIgnoreCase(NTS) && person instanceof NonTeachingStaff) {
+                String id = person.getID();
+                try {
+                    maxId = Math.max(maxId, Integer.parseInt(id));
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid ID format for non-teaching staff: " + id);
+                }
+            }
+        }
+
+        // Increment maxId by 1
+        return String.valueOf(maxId + 1);
     }
 
 }
