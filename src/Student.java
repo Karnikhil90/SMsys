@@ -3,35 +3,32 @@ package src;
 import java.time.LocalDate;
 
 public class Student extends Person {
-    private String studentId;
-    private String standard;
-
     public Student(String name, LocalDate dob, String contact, String studentId, String standard) {
         super(name, dob, contact);
-        this.studentId = studentId;
-        this.standard = standard;
+        getProperties().put("studentId", studentId);
+        getProperties().put("standard", standard);
     }
 
     @Override
     public void role() {
-        System.out.println("I am a student with ID: " + studentId);
+        System.out.println("I am a student with ID: " + getID());
     }
 
     @Override
     public String getID() {
-        return studentId; // Return the student's ID
+        return (String) getProperties().get("studentId"); // Retrieve the student's ID from the map
     }
 
     public String getStandard() {
-        return standard;
+        return (String) getProperties().get("standard"); // Retrieve the standard from the map
     }
 
     public void setStandard(String standard) {
-        this.standard = standard;
+        getProperties().put("standard", standard); // Update the standard in the map
     }
 
     @Override
     public String toString() {
-        return super.toString() + ", Student ID: " + studentId + ", Standard: " + standard;
+        return super.toString() + ", Student ID: " + getID() + ", Standard: " + getStandard();
     }
 }
