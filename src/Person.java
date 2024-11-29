@@ -18,6 +18,10 @@ public abstract class Person {
         return (String) properties.get("name");
     }
 
+    public void setName(String name) {
+        properties.put("name", name);
+    }
+
     public LocalDate getDob() {
         return (LocalDate) properties.get("dob");
     }
