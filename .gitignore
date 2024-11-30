@@ -4,4 +4,5 @@
 *.class
 # Debuging & Testing 
 test
+bin
 
