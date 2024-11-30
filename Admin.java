@@ -15,6 +15,7 @@ import src.Person;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class Admin {
     DataManager dataManager;
@@ -23,6 +24,24 @@ public class Admin {
     public Admin() {
         dataManager = new DataManager();
         scanner = new Scanner(System.in);
+    }
+
+    public void clear() {
+        try {
+            // Detect the operating system
+            String os = System.getProperty("os.name").toLowerCase();
+
+            // Execute the appropriate command
+            if (os.contains("win")) {
+                // For Windows
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // For Unix/Linux/Mac
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (IOException | InterruptedException ex) {
+            System.err.println("Failed to clear the terminal: " + ex.getMessage());
+        }
     }
 
     public LocalDate dob_input() {
@@ -83,7 +102,7 @@ public class Admin {
                 dataManager.add(student);
                 System.out.println("Student added successfully!");
 
-            } else if (option2.equalsIgnoreCase("2")) { // Add Teacher
+            } else if (option2.equalsIgnoreCase(dataManager.TEACHER)) { // Add Teacher
                 System.out.println("Adding new teacher...");
                 System.out.print("Enter teacher name: ");
                 String name = scanner.nextLine().trim();
@@ -97,7 +116,7 @@ public class Admin {
                 dataManager.add(teacher);
                 System.out.println("Teacher added successfully!");
 
-            } else if (option2.equalsIgnoreCase("3")) { // Add NonTeachingStaff
+            } else if (option2.equalsIgnoreCase(dataManager.NTS)) { // Add NonTeachingStaff
                 System.out.println("Adding new non-teaching staff...");
                 System.out.print("Enter staff name: ");
                 String name = scanner.nextLine().trim();
@@ -168,6 +187,7 @@ public class Admin {
 
     private void askForChoice() {
         while (true) {
+
             System.out.println("\nChoose an option:");
             System.out.println("0. Exit");
             System.out.println("1. Add");
@@ -182,6 +202,10 @@ public class Admin {
             if (firstChoice.equals("0")) {
                 System.out.println("Exiting...");
                 break;
+            }
+            if (firstChoice.equals("clear")) {
+                clear();
+                continue;
             }
 
             switch (firstChoice) {
@@ -202,17 +226,10 @@ public class Admin {
                         }
                     });
                     break;
-
-                case "2": // Update
-                    choice(2, null); // No second choice needed for update
-                    break;
-
+                case "2": // update
                 case "3": // Remove
-                    choice(3, null); // No second choice needed for remove
-                    break;
-
                 case "4": // Search
-                    choice(4, null); // No second choice needed for search
+                    choice(Integer.valueOf(firstChoice), null);
                     break;
 
                 default:
