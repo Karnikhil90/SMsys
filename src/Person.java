@@ -14,8 +14,12 @@ public abstract class Person {
         properties.put("contact", contact);
     }
 
+    public Person(Map<String, Object> map) {
+        properties = new HashMap<>(map);
+    }
+
     public String getName() {
-        return (String) properties.get("name");
+        return (String) properties.getOrDefault("name", null);
     }
 
     public void setName(String name) {
@@ -23,7 +27,7 @@ public abstract class Person {
     }
 
     public LocalDate getDob() {
-        return (LocalDate) properties.get("dob");
+        return (LocalDate) properties.getOrDefault("dob", null);
     }
 
     public void setDob(LocalDate dob) {
@@ -31,7 +35,7 @@ public abstract class Person {
     }
 
     public String getContact() {
-        return (String) properties.get("contact");
+        return (String) properties.getOrDefault("contact", null);
     }
 
     public void setContact(String contact) {
@@ -39,7 +43,11 @@ public abstract class Person {
     }
 
     public int getAge() {
-        return Period.between(getDob(), LocalDate.now()).getYears();
+        try {
+            return Period.between(getDob(), LocalDate.now()).getYears();
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     public Map<String, Object> getProperties() {
@@ -47,7 +55,7 @@ public abstract class Person {
     }
 
     public String toString() {
-        return "Name: " + getName() + ", DOB: " + getDob() + ", Contact: " + getContact();
+        return properties.toString();
     }
 
     public abstract void role(); // Force subclasses to define their role

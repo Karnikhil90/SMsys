@@ -1,12 +1,17 @@
 package src;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 public class Teacher extends Person {
     public Teacher(String name, LocalDate dob, String contact, String employeeId, String subject) {
         super(name, dob, contact);
         getProperties().put("employeeId", employeeId);
         getProperties().put("subject", subject);
+    }
+
+    public Teacher(Map<String, Object> map) {
+        super(map);
     }
 
     @Override
@@ -17,7 +22,7 @@ public class Teacher extends Person {
     // Getter and Setter for Employee ID
     @Override
     public String getID() {
-        return (String) getProperties().get("employeeId");
+        return (String) getProperties().getOrDefault("employeeId", null);
     }
 
     public void setID(String employeeId) {
@@ -26,16 +31,11 @@ public class Teacher extends Person {
 
     // Getter and Setter for Subject
     public String getSubject() {
-        return (String) getProperties().get("subject");
+        return (String) getProperties().getOrDefault("subject", null);
     }
 
     public void setSubject(String subject) {
         getProperties().put("subject", subject);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + ", Employee ID: " + getID() + ", Subject: " + getSubject();
     }
 
 }
