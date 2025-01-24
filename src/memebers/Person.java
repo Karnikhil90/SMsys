@@ -1,11 +1,11 @@
-package src;
+package src.memebers;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Person {
+public abstract class Person extends Object {
     private Map<String, Object> properties = new HashMap<>();
 
     public Person(String name, LocalDate dob, String contact) {
